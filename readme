@@ -1,0 +1,8 @@
+### JS library for  loading tabs
+This library is currently not working.
+its working in progress.
+
+## What is the goal of this project?
+The goal is to make a JS library for loading page content fast on request.
+The content is not loaded when the page is loaded, but when a tablink is clicked.
+The aim is to make it as fast as possible with use of prefetching when the user hovers the mouse over a link.
