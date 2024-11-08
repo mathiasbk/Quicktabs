@@ -24,10 +24,10 @@
                         <a class="nav-link tablink active" aria-current="page" href="#">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link tablink" href="#">About Us</a>
+                        <a class="nav-link tablink" href="examplepages/about.php">About Us</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link tablink" href="#">Services</a>
+                        <a class="nav-link tablink" href="examplepages/services.php">Services</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link tablink" href="#">Contact</a>

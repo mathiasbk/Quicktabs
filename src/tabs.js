@@ -24,15 +24,57 @@ class Tabs  {
       }
 
       console.log(this.links);
-      // Add event listeners
+      // Add event listeners for click
       this.links.forEach((link, index) => {
         link.addEventListener("click", (event) => {
-          
+
           event.preventDefault();
 
-          alert("Tab clicked");
+          this.UpdateURL(link.textContent);
+          this.UpdateContent(link);
+
         });
       });
 
+      //TODO: Add event listeners for mouseover for prefetching the content.
+
+    }
+
+    UpdateContent(clickedtab)
+    {
+      console.log("clickedtab", clickedtab);
+
+      var pagelink = clickedtab.getAttribute("href");
+      if(!pagelink || pagelink == "#")
+      {
+        return;
+      }
+      console.log("pagelink", pagelink);
+
+      this.FetchContent(pagelink).then((content) => {
+        this.container.innerHTML = content;
+      });
+      
+    }
+
+    //Gets the tabcontent from backend
+    FetchContent(pagelink)
+    {
+      return fetch(pagelink)
+        .then(response => response.text())
+        .then(data => {
+          return data;
+      })
+    }
+
+    UpdateURL(sitename)
+    {
+      //window.location.hash = this.Cleanurl(sitename);
+      window.location.hash = sitename;
+    }
+
+    Cleanurl(string)
+    {
+      return string.replace('[^.]*$', '');
     }
 }
