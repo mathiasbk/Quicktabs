@@ -5,8 +5,8 @@ But it is still work in progress.
 
 
 ## Roadmap
-- ~~ Prefetching. Fetch the content when the user hovers the mouse over the links~~
-- ~~ update url when a tab is clicked ~~
+- ~~Prefetching. Fetch the content when the user hovers the mouse over the links~~
+- ~~Update url when a tab is clicked ~~
 - Load correct tab on pageload
 - Maybe add a loading animation
 - Increase the speed more. Maybe use serviceworker to cache content of the tabs.
@@ -24,3 +24,11 @@ But it is still work in progress.
         });
 ```
 
+## Options
+
+| Option        | Parameters   | Description                                           |
+|---------------|--------------|-------------------------------------------------------|
+| tablinksclass |              | Class of the tablinks                                 |
+| containerid   |              | DOM ID of the container that will show the tabcontent |
+| activetab     |              | Not yet implemented.                                  |
+| prefetching   | True / false | If prefetching should be enabled. Default is true.    |

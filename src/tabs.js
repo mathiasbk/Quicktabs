@@ -11,15 +11,15 @@ class Tabs  {
     {
 
       const defaultOptions = {
-        activeTab: 0,
-        tablinksClass: "tablink",
-        containerId: "tab-container",
+        activetab: 0,
+        tablinksclass: "tablink",
+        containerid: "tab-container",
         prefetching: true
       };
 
       this.settings = { ...defaultOptions, ...options };
-      this.container = document.getElementById(this.settings.containerId);
-      this.links = document.querySelectorAll(this.settings.tablinksClass);
+      this.container = document.getElementById(this.settings.containerid);
+      this.links = document.querySelectorAll(this.settings.tablinksilass);
 
       if (!this.container) {
         console.error("Tab container not found");
