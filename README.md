@@ -1,16 +1,13 @@
 
 # JS library for quickly loading tabs
 
-This library is currently not working.
-its working in progress.
-
-## text
-This library is currently not working.
-its working in progress.
+This library is currently working with tab click and prefetching when the user hovers over the link.
+But it is still work in progress.
 
 ## Roadmap
+- ~~ Prefetching. Fetch the content when the user hovers the mouse over the links~~
+- ~~ update url when a tab is clicked ~~
 - Load correct tab on pageload
-- update url when a tab is clicked
-- Prefetching. Fetch the content when the user hovers the mouse over the links
 - Maybe add a loading animation
+- Increase the speed more. Maybe use serviceworker to cache content of the tabs.
 

@@ -1,1 +1,0 @@
-examplecontent of services.php
