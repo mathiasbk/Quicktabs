@@ -1,5 +1,12 @@
 class Tabs  {
 
+  //TODO: Check if the tab is active fetching already, and dont fetch it again.
+    PrefetchActive = false;
+    Prefetchcontent = "";
+    PrefetchedID;
+    PrefetchedQued = false;
+    UpdateContentAfterPrefetch = false;
+
     constructor(options = {}) 
     {
 
@@ -7,6 +14,7 @@ class Tabs  {
         activeTab: 0,
         tablinksClass: "tablink",
         containerId: "tab-container",
+        prefetching: true
       };
 
       this.settings = { ...defaultOptions, ...options };
@@ -24,6 +32,7 @@ class Tabs  {
       }
 
       console.log(this.links);
+
       // Add event listeners for click
       this.links.forEach((link, index) => {
         link.addEventListener("click", (event) => {
@@ -31,16 +40,33 @@ class Tabs  {
           event.preventDefault();
 
           this.UpdateURL(link.textContent);
-          this.UpdateContent(link);
+          if(!this.PrefetchedQued)
+          {
+            this.UpdateContent(link, index);
+          }
+          else
+          {
+            this.UpdateContentAfterPrefetch = true
+          }
 
         });
       });
 
-      //TODO: Add event listeners for mouseover for prefetching the content.
-
+      //Add eventlistners for mouseover for prefetching the content
+      if(this.settings.prefetching)
+      {
+          this.links.forEach((link, index) => {
+          link.addEventListener("mouseover", (event) => {
+            this.PrefetchedID = index;
+            this.PrefetchActive = true;
+            this.Prefetchcontent = this.PrefetchContent(link.getAttribute("href"), index);
+  
+          });
+        })
+      }
     }
 
-    UpdateContent(clickedtab)
+    UpdateContent(clickedtab, tabindex)
     {
       console.log("clickedtab", clickedtab);
 
@@ -51,10 +77,17 @@ class Tabs  {
       }
       console.log("pagelink", pagelink);
 
+      if(!this.PrefetchActive && this.PrefetchedID == tabindex && this.Prefetchcontent)
+      {
+        //console.log("using prefetched content");
+        this.container.innerHTML = this.Prefetchcontent;
+        return;
+      }
+
       this.FetchContent(pagelink).then((content) => {
         this.container.innerHTML = content;
       });
-      
+    
     }
 
     //Gets the tabcontent from backend
@@ -62,9 +95,33 @@ class Tabs  {
     {
       return fetch(pagelink)
         .then(response => response.text())
-        .then(data => {
-          return data;
-      })
+        .then(data => { return data })
+        .catch(error => console.error('Error:', error)
+      );
+    }
+
+    //prefetch the content when the user hovers over the link
+    async PrefetchContent(pagelink, linkindex)
+    {
+      //console.log("prefetching", pagelink);
+      this.PrefetchedQued = true;
+
+      const response = await fetch(pagelink);
+      const data = await response.text();
+
+      this.Prefetchcontent = data;
+      this.PrefetchedID = linkindex;
+      this.PrefetchActive = false;
+
+      this.PrefetchedQued = false;
+
+      if(this.UpdateContentAfterPrefetch)
+      {
+        this.UpdateContentAfterPrefetch = false;
+        this.UpdateContent(this.links[this.PrefetchedID], this.PrefetchedID);
+      }
+
+      return data;
     }
 
     UpdateURL(sitename)
