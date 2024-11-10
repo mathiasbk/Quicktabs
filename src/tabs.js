@@ -4,6 +4,8 @@ class Tabs  {
     PrefetchActive = false;
     Prefetchcontent = "";
     PrefetchedID;
+    PrefetchedQued = false;
+    UpdateContentAfterPrefetch = false;
 
     constructor(options = {}) 
     {
@@ -38,7 +40,14 @@ class Tabs  {
           event.preventDefault();
 
           this.UpdateURL(link.textContent);
-          this.UpdateContent(link, index);
+          if(!this.PrefetchedQued)
+          {
+            this.UpdateContent(link, index);
+          }
+          else
+          {
+            this.UpdateContentAfterPrefetch = true
+          }
 
         });
       });
@@ -46,9 +55,8 @@ class Tabs  {
       //Add eventlistners for mouseover for prefetching the content
       if(this.settings.prefetching)
       {
-        this.links.forEach((link, index) => {
+          this.links.forEach((link, index) => {
           link.addEventListener("mouseover", (event) => {
-  
             this.PrefetchedID = index;
             this.PrefetchActive = true;
             this.Prefetchcontent = this.PrefetchContent(link.getAttribute("href"), index);
@@ -71,7 +79,7 @@ class Tabs  {
 
       if(!this.PrefetchActive && this.PrefetchedID == tabindex && this.Prefetchcontent)
       {
-        console.log("using prefetched content");
+        //console.log("using prefetched content");
         this.container.innerHTML = this.Prefetchcontent;
         return;
       }
@@ -92,15 +100,26 @@ class Tabs  {
       );
     }
 
+    //prefetch the content when the user hovers over the link
     async PrefetchContent(pagelink, linkindex)
     {
-      console.log("prefetching", pagelink);
+      //console.log("prefetching", pagelink);
+      this.PrefetchedQued = true;
+
       const response = await fetch(pagelink);
       const data = await response.text();
 
       this.Prefetchcontent = data;
       this.PrefetchedID = linkindex;
       this.PrefetchActive = false;
+
+      this.PrefetchedQued = false;
+
+      if(this.UpdateContentAfterPrefetch)
+      {
+        this.UpdateContentAfterPrefetch = false;
+        this.UpdateContent(this.links[this.PrefetchedID], this.PrefetchedID);
+      }
 
       return data;
     }
