@@ -6,6 +6,7 @@ class Tabs  {
     PrefetchedID;
     PrefetchedQued = false;
     UpdateContentAfterPrefetch = false;
+    
 
     constructor(options = {}) 
     {
@@ -21,6 +22,7 @@ class Tabs  {
       this.settings = { ...defaultOptions, ...options };
       this.container = document.getElementById(this.settings.containerid);
       this.links = document.querySelectorAll(this.settings.tablinksclass);
+      this.linkArray = Array.from(this.links);
 
       if (!this.container) {
         console.error("Tab container not found");
@@ -55,7 +57,7 @@ class Tabs  {
 
           if(!this.PrefetchedQued)
           {
-            this.UpdateContent(link, index);
+            this.setActiveTab(index);
           } else {
             this.UpdateContentAfterPrefetch = true
           }
@@ -74,26 +76,81 @@ class Tabs  {
           });
         })
       }
+
+      //Check if there is a hash in the url on pageload.
+      if(window.location.hash) {
+        var requestedHash = decodeURIComponent(window.location.hash.substring(1));
+
+        console.log("Hash:", requestedHash);
+        this.setActiveTab(requestedHash);
+      }
+      else { this.setActiveTab(0); }
     }
 
-    SetActiveTab(tabId) {
-      this.links[tabId].classList.add("active");
+    //set the active tab
+    setActiveTab(tabIdentifier) {
+      let tabIndex;
+      console.log(this.linkArray);
+      // Bestem tabIndex basert på input (indeks eller navn)
+      if (typeof tabIdentifier === "number") {
+        tabIndex = tabIdentifier;
+      } else if (typeof tabIdentifier === "string") {
+        tabIndex = this.linkArray.findIndex(
+          (link) => link.textContent.trim() === tabIdentifier
+        );
+      } else {
+        console.error("Invalid tab identifier");
+        return;
+      }
+      if (tabIndex < 0 || tabIndex >= this.linkArray.length) {
+        console.error("Tab index out of range");
+        return;
+      }
+  
+      const link = this.linkArray[tabIndex];
+  
+      this.UpdateURL(link.textContent);
+
+      this.linkArray.forEach((link) => {
+        link.classList.remove("active");
+      });
+      link.classList.add("active");
+  
+      this.LoadingAnimation(true);
+  
+      const pagelink = link.getAttribute("href");
+      if (!pagelink || pagelink === "#") {
+        this.LoadingAnimation(false); 
+        return;
+      }
       
+      this.GetContent(link, tabIndex)
+      .then((content) => {
+        console.log("Content: ", content);
+        this.container.innerHTML = content;
+      })
+      .catch((error) => {
+        console.error("Error getting content:", error);
+      })
+      .finally(() => {
+      });
+
     }
-    UpdateContent(clickedtab, tabindex)
+    async GetContent(clickedtab, tabindex)
     {
       var pagelink = clickedtab.getAttribute("href");
-      if(!pagelink || pagelink == "#") { return; }
+
+      if(!pagelink || pagelink == "#") { return Promise.resolve(null);  }
 
 
       if(!this.PrefetchActive && this.PrefetchedID == tabindex && this.Prefetchcontent)
       {
-        this.container.innerHTML = this.Prefetchcontent;
-        return;
+        return Promise.resolve(this.Prefetchcontent);
       }
 
-      this.FetchContent(pagelink).then((content) => {
-        this.container.innerHTML = content;
+      return this.FetchContent(pagelink).then((content) => {
+        console.log("test2 - " + pagelink + " - " + content);
+        return content;
       });
     
     }
@@ -127,7 +184,8 @@ class Tabs  {
       if(this.UpdateContentAfterPrefetch)
       {
         this.UpdateContentAfterPrefetch = false;
-        this.UpdateContent(this.links[this.PrefetchedID], this.PrefetchedID);
+        //this.UpdateContent(this.links[this.PrefetchedID], this.PrefetchedID);
+        this.setActiveTab(this.PrefetchedID);
       }
 
       //Hide loadingamination
@@ -164,6 +222,7 @@ class Tabs  {
         height: 80px;
         animation: spin 2s linear infinite;
       `;
+      this.container.innerHTML = "";
       this.container.appendChild(loadingdiv);
 
     }

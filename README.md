@@ -8,7 +8,7 @@ But it is still work in progress.
 - ~~Prefetching. Fetch the content when the user hovers the mouse over the links~~
 - ~~Update url when a tab is clicked~~
 - ~~Maybe add a loading animation~~
-- Load correct tab on pageload
+- ~~Load correct tab on pageload~~
 - Increase the speed more. Maybe use serviceworker to cache content of the tabs.
 
 
