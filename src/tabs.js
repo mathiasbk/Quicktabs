@@ -46,29 +46,19 @@ class Tabs  {
         document.head.appendChild(styleSheet);
       } 
 
-      console.log(this.links);
-
       // Add event listeners for click
       this.links.forEach((link, index) => {
-        console.log("clicked", link);
         link.addEventListener("click", (event) => {
-          
-
           event.preventDefault();
-
-          //Show loadinganimation
           this.LoadingAnimation(true);
-
           this.UpdateURL(link.textContent);
+
           if(!this.PrefetchedQued)
           {
             this.UpdateContent(link, index);
-          }
-          else
-          {
+          } else {
             this.UpdateContentAfterPrefetch = true
           }
-
         });
       });
 
@@ -86,20 +76,18 @@ class Tabs  {
       }
     }
 
+    SetActiveTab(tabId) {
+      this.links[tabId].classList.add("active");
+      
+    }
     UpdateContent(clickedtab, tabindex)
     {
-      console.log("clickedtab", clickedtab);
-
       var pagelink = clickedtab.getAttribute("href");
-      if(!pagelink || pagelink == "#")
-      {
-        return;
-      }
-      console.log("pagelink", pagelink);
+      if(!pagelink || pagelink == "#") { return; }
+
 
       if(!this.PrefetchActive && this.PrefetchedID == tabindex && this.Prefetchcontent)
       {
-        //console.log("using prefetched content");
         this.container.innerHTML = this.Prefetchcontent;
         return;
       }
@@ -115,10 +103,7 @@ class Tabs  {
     {
       return fetch(pagelink)
         .then(response => response.text())
-        .then(data => 
-          { 
-            return data;
-          }
+        .then(data => { return data }
         )
         .catch(error => console.error('Error:', error)
       );
@@ -179,9 +164,6 @@ class Tabs  {
         height: 80px;
         animation: spin 2s linear infinite;
       `;
-
-      
-
       this.container.appendChild(loadingdiv);
 
     }
