@@ -90,8 +90,7 @@ class Tabs  {
     //set the active tab
     setActiveTab(tabIdentifier) {
       let tabIndex;
-      console.log(this.linkArray);
-      // Bestem tabIndex basert på input (indeks eller navn)
+      // Choose tab index based on input (indeks or name)
       if (typeof tabIdentifier === "number") {
         tabIndex = tabIdentifier;
       } else if (typeof tabIdentifier === "string") {
@@ -126,7 +125,7 @@ class Tabs  {
       
       this.GetContent(link, tabIndex)
       .then((content) => {
-        console.log("Content: ", content);
+
         this.container.innerHTML = content;
       })
       .catch((error) => {
