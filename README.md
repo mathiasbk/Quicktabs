@@ -18,11 +18,14 @@ But it is still work in progress.
 <script src="src/tabs.js"></script>
 
  const Tabmenu = new Tabs({
-            tablinksClass: ".tablink",
-            containerId: "tabcontent",
+            tablinksclass: ".tablink",
+            containerid: "tabcontent",
             activeTab: 0
         });
 ```
+
+## Known issues
+- JS in the fetched tabs is not excuted
 
 ## Options
 
@@ -30,6 +33,6 @@ But it is still work in progress.
 |---------------|--------------|-------------------------------------------------------|
 | tablinksclass |              | Class of the tablinks                                 |
 | containerid   |              | DOM ID of the container that will show the tabcontent |
-| activetab     |              | Not yet implemented.                                  |
+| activetab     |       ID / tabnemake       | Active tab that is visible to the user                |
 | prefetching   | True / false | If prefetching should be enabled. Default is true.    |
 | loadinganimation   | True / false | Show loading animation. Default is true.    |
