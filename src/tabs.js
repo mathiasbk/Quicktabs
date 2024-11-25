@@ -131,13 +131,14 @@ class Tabs
         const link = this.linkArray[tabIndex];
         this.UpdateURL(link.textContent);
 
+        //updated active class
         this.linkArray.forEach((link) =>
         {
             link.classList.remove("active");
         });
-
         link.classList.add("active");
 
+        //show loading animation
         this.LoadingAnimation(true);
 
         const pagelink = link.getAttribute("href");
@@ -145,6 +146,15 @@ class Tabs
         {
             this.LoadingAnimation(false);
             return;
+        }
+
+        //Get JS code for this tab
+        const script = link.getAttribute("data-script");
+        if (script)
+        {
+            const scriptElement = document.createElement("script");
+            scriptElement.src = script;
+            document.head.appendChild(scriptElement);
         }
 
         this.GetContent(link, tabIndex)

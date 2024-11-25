@@ -24,6 +24,18 @@ But it is still work in progress.
         });
 ```
 
+HTML links
+```html
+<ul>
+    <li class="nav-item">
+        <a class="nav-link tablink" href="examplepages/about.html" data-script="examplepages/about.js">About Us</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link tablink" href="examplepages/services.html" data-script="examplepages/service.js">Services</a>
+    </li>
+</ul>
+```
+
 ## Known issues
 - JS in the fetched tabs is not excuted
 
